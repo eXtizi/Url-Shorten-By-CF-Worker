@@ -6,16 +6,16 @@ const html404 = `<!DOCTYPE html>
 
 
 async function randomString(len) {
-　　len = len || 6;
-　　let $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    
+      len = len || 6;
+      let $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    
   /****Removed confusing letters an numbers, oOLl,9gq,Vv,Uu,I1****/
   
-　　let maxPos = $chars.length;
-　　let result = '';
-　　for (i = 0; i < len; i++) {
-　　　　result += $chars.charAt(Math.floor(Math.random() * maxPos));
-　　}
-　　return result;
+      let maxPos = $chars.length;
+      let result = '';
+      for (i = 0; i < len; i++) {
+            result += $chars.charAt(Math.floor(Math.random() * maxPos));
+      }
+      return result;
 }
 async function checkURL(URL){
     let str=URL;
@@ -30,8 +30,8 @@ async function checkURL(URL){
         return false;
     }
 } 
-async function save_url(URL){
-    let random_key=await randomString()
+async function save_url(URL,title){
+    let random_key=title
     let is_exist=await LINKS.get(random_key)
     console.log(is_exist)
     if (is_exist == null)
@@ -44,6 +44,7 @@ async function handleRequest(request) {
   if (request.method === "POST") {
     let req=await request.json()
     console.log(req["url"])
+    console.log(req["title"])
     if(!await checkURL(req["url"])){
     return new Response(`{"status":500,"key":": Error: Url illegal."}`, {
       headers: {
@@ -52,7 +53,7 @@ async function handleRequest(request) {
       "Access-Control-Allow-Methods": "POST",
       },
     })}
-    let stat,random_key=await save_url(req["url"])
+    let stat,random_key=await save_url(req["url"],req["title"])
     console.log(stat)
     if (typeof(stat) == "undefined"){
       return new Response(`{"status":200,"key":"/`+random_key+`"}`, {
@@ -86,8 +87,8 @@ async function handleRequest(request) {
   console.log(path)
   if(!path){
 
-    const html= await fetch("https://cdn.jsdelivr.net/gh/51sec/Url-Shorten-By-CF-Worker@main/index.html")
-/****customized index.html at main branch, easier to edit it****/
+    const html= await fetch("https://cdn.jsdelivr.net/gh/eXtizi/Url-Shorten-By-CF-Worker@4d/index.html")
+/****customized index.html at maixn brancdh, easier to edit it****/
     
     return new Response(await html.text(), {
     headers: {
